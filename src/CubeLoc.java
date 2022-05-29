@@ -21,4 +21,12 @@ public class CubeLoc {
         x = 0+(xOffset*j+stepOffset+frameOffset);
         y=  0+(yOffset*i+frameOffset);
     }
+
+    public void update(boolean direction){
+        if(direction){
+            y-=1;
+        }else if(!direction){
+            y+=1;
+        }
+    }
 }
