@@ -13,6 +13,7 @@ public class Panel extends JPanel{
 
     private CubeLoc cubeArray[][] = new CubeLoc[40][10];
 
+    private int Wavetiming=0;
     private boolean StopWaveTiming = false;
 
     private int Reversetiming[] = new int[40];
@@ -41,7 +42,7 @@ public class Panel extends JPanel{
         g.fillRect(0, 0, this.getSize().width, this.getSize().height);
         
         drawGrid(g);
-        animation();
+        
     }
 
     protected void drawGrid(Graphics g){
@@ -54,11 +55,11 @@ public class Panel extends JPanel{
                 g.drawImage(cube, cubeArray[i][j].x, (int)cubeArray[i][j].y, 50, 50, null);
             }
         }
+        animation();
     }
 
     private void animation(){
-        if(StopWaveTiming = false){
-            int Wavetiming =0;
+        if(StopWaveTiming == false){
             do{
                 for(int i=0;i<Wavetiming;i++){
                     for(int j=0;j<10;j++){
@@ -70,28 +71,29 @@ public class Panel extends JPanel{
                         }
 
                         cubeArray[i][j].update(direction[i]);
+                        System.out.println(i+" "+j);
                     }
+                    repaint();
                 }
                 Wavetiming++;
-                repaint();
             }while(Wavetiming!=40);
         }
 
         StopWaveTiming = true;
 
-        // for(int i=0;i<40;i++){
-        //     for(int j=0;j<10;j++){
+        for(int i=0;i<40;i++){
+            for(int j=0;j<10;j++){
                 
-        //         cubeArray[i][j].update(direction[i]);
+                cubeArray[i][j].update(direction[i]);
 
-        //         if(Reversetiming[i] != 100){
-        //             Reversetiming[i]++;
-        //         }else{
-        //             Reversetiming[i]=0;
-        //             direction[i] = !direction[i];
-        //         }
-        //     }
-        // }repaint();
+                if(Reversetiming[i] != 100){
+                    Reversetiming[i]++;
+                }else{
+                    Reversetiming[i]=0;
+                    direction[i] = !direction[i];
+                }
+            }
+        }repaint();
     }
 
 }
