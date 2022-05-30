@@ -11,12 +11,12 @@ import java.util.Arrays;
 public class Panel extends JPanel{
     private BufferedImage cube = ImageIO.read(new File("isocube.png"));
 
+    private Wait wait = new Wait();
+
     private CubeLoc cubeArray[][] = new CubeLoc[40][10];
 
-    private int Wavetiming=0;
-    private boolean StopWaveTiming = false;
+    private int animationState[] = new int[40];
 
-    private int Reversetiming[] = new int[40];
     private boolean direction[] = new boolean[40];
 
     public Panel(int sizeX, int sizeY) throws Exception{
@@ -31,7 +31,17 @@ public class Panel extends JPanel{
             }
         }
 
-        Arrays.fill(Reversetiming,0);
+        int i=0;
+        int state=0;
+        while(animationState[40-1]==0){
+            animationState[i]= state;
+            i++;
+            state++;
+            if(state==8){
+                state =0;
+            }
+        }
+
         Arrays.fill(direction,true);
     }
 
@@ -52,48 +62,35 @@ public class Panel extends JPanel{
                 if((i%2==1 && j==9) || i==39){
                     break;
                 }
-                g.drawImage(cube, cubeArray[i][j].x, (int)cubeArray[i][j].y, 50, 50, null);
+                g.drawImage(cube, cubeArray[i][j].x, cubeArray[i][j].y, 50, 50, null);
             }
         }
-        animation();
+
+        try {
+            animation();
+        } catch (Exception e) {
+            //TODO: handle exception
+        }
+        
     }
 
-    private void animation(){
-        if(StopWaveTiming == false){
-            do{
-                for(int i=0;i<Wavetiming;i++){
-                    for(int j=0;j<10;j++){
-                        if(Reversetiming[i] != 100){
-                            Reversetiming[i]++;
-                        }else{
-                            Reversetiming[i]=0;
-                            direction[i] = !direction[i];
-                        }
-
-                        cubeArray[i][j].update(direction[i]);
-                        System.out.println(i+" "+j);
-                    }
-                    repaint();
-                }
-                Wavetiming++;
-            }while(Wavetiming!=40);
-        }
-
-        StopWaveTiming = true;
+    private void animation() throws Exception{
 
         for(int i=0;i<40;i++){
-            for(int j=0;j<10;j++){
-                
-                cubeArray[i][j].update(direction[i]);
-
-                if(Reversetiming[i] != 100){
-                    Reversetiming[i]++;
-                }else{
-                    Reversetiming[i]=0;
-                    direction[i] = !direction[i];
-                }
+            if(animationState[i]==7){
+                animationState[i]=0;
+            }else{
+                animationState[i]++;
             }
-        }repaint();
+            for(int j=0;j<10;j++){
+                try{
+                    cubeArray[i][j].update(animationState[i]);
+                }catch(Exception e){
+                    System.out.println(e);
+                }
+            }repaint();
+        }
+        wait.sleep();
     }
 
 }

@@ -1,4 +1,4 @@
-public class CubeLoc {
+public class CubeLoc extends Thread{
     public int y;
     public int x;
 
@@ -22,11 +22,14 @@ public class CubeLoc {
         y=  0+(yOffset*i+frameOffset);
     }
 
-    public void update(boolean direction){
-        if(direction){
-            y-=1;
-        }else if(!direction){
-            y+=1;
+    public void update(int state) throws Exception{
+        int offset =10 ;
+        if(state<=2){
+            y+=offset;
+        }else if(state>2 && state<=6){
+            y-=offset;
+        }else if(state == 7){
+            y+=offset;
         }
     }
 }
